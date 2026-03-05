@@ -1,10 +1,10 @@
-enum TOKEN {
-    NUMBER(f64),
-    PLUS,
-    MINUS,
-    MULTIPLY,
-    DIVIDE,
-    LPAREN,
-    RPAREN,
-    EXPONENT,
+pub enum Token {
+    Number(f64),
+    Plus,
+    Minus,
+    Multiply,
+    Divide,
+    LeftParen,
+    RightParen,
+    Exponent,
 }
