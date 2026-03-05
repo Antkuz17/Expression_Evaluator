@@ -18,32 +18,17 @@ pub fn get_user_input() -> String {
 
 
     input
-
 }
 
 
 // Based on the input return true or false if it contains the right variables
 // Does not check if its a valid expression e.g. 3{{ would give true
 pub fn validate_input(input: &str) -> bool {
+    let valid_chars = ['+', '-', '*', '/', '(', ')', '.', ' ', '^', 
+                       '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 
-    let valid_chars = ['+', '-', '*', '/', '(', ')', '.', ' ', '^', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+    input.chars().all(|c| valid_chars.contains(&c))
+}
 
-    for letter in input.chars(){
-        // Used as indicator for if the current char is valid
-        let mut valid = false;
-        
-        for char in valid_chars{
-            if letter == char {
-                valid = true;
-                break;
-            }
-        }
-        // If the char is not valid return false
-        if !valid {
-            return false;
-        }
-    }
-    
-    // If all chars are valid return true
-    true
-}   
+
+
