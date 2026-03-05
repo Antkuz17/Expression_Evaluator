@@ -12,10 +12,10 @@ pub fn get_user_input() -> String {
     while !validate_input(&input) {
         println!("Invalid input, please try again");
         input.clear();
-        io::stdin().read_line(&mut input);
+        io::stdin().read_line(&mut input).unwrap();
         input = input.trim().to_string();
     }
-    
+
     input = remove_white_space(&input);
 
     input

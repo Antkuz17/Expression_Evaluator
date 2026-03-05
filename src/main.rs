@@ -8,5 +8,6 @@ use crate::userinput::get_user_input;
 
 
 fn main() {
-    get_user_input();
+    let tokens = lexer::tokenize("12+3");
+    println!("{:?}", tokens);
 }

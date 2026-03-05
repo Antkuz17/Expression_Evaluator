@@ -64,5 +64,8 @@ pub fn tokenize(input: &str) -> Result<Vec<Token>, String>{
         }
     
     }
+    if !num_buffer.is_empty() {
+        tokens.push(Token::Number(num_buffer.parse().unwrap()));
+    }
     Ok(tokens)
 }
