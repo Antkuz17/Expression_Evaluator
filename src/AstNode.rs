@@ -50,7 +50,7 @@ impl AstNode{
 
     // Getter for operator 
     pub fn get_operator(&self) -> Option<&Token> {
-        self.operator
+        self.operator.as_ref()
     }   
 
     // Setter for number
