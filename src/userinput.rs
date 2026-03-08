@@ -22,7 +22,7 @@ pub fn get_user_input() -> String {
 
 // Based on the input return true or false if it contains the right variables
 // Does not check if its a valid expression e.g. 3{{ would give true
-pub fn validate_input(input: &str) -> bool {
+fn validate_input(input: &str) -> bool {
     let valid_chars = [
         '+', '-', '*', '/', '(', ')', '.', ' ', '^', '0', '1', '2', '3', '4', '5', '6', '7', '8',
         '9',
@@ -32,11 +32,11 @@ pub fn validate_input(input: &str) -> bool {
 }
 
 // Allows early exit from the program if the user types "exit"
-pub fn is_exit_command(input: &str) -> bool {
+fn is_exit_command(input: &str) -> bool {
     input.to_lowercase() == "exit"
 }
 
 // Remove all white space since the lexer does not care about it
-pub fn remove_white_space(input: &str) -> String {
+fn remove_white_space(input: &str) -> String {
     input.chars().filter(|c| !c.is_whitespace()).collect()
 }

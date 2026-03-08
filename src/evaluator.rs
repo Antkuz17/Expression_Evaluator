@@ -1,4 +1,5 @@
-// This one should be easier
+use crate::AstNode::AstNode;
+use crate::token::Token;
 
 pub fn evaluate(node: &AstNode) -> Result<f64, String> {
     if let Some(n) = node.get_num() {
@@ -9,10 +10,10 @@ pub fn evaluate(node: &AstNode) -> Result<f64, String> {
     let right = evaluate(node.get_right().ok_or("Missing right child")?)?;
 
     match node.get_operator() {
-        Some(Token::Plus)     => Ok(left + right),
-        Some(Token::Minus)    => Ok(left - right),
+        Some(Token::Plus) => Ok(left + right),
+        Some(Token::Minus) => Ok(left - right),
         Some(Token::Multiply) => Ok(left * right),
-        Some(Token::Divide)   => {
+        Some(Token::Divide) => {
             if right == 0.0 {
                 Err(String::from("Division by zero"))
             } else {

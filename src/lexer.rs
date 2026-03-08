@@ -11,52 +11,46 @@ pub fn tokenize(input: &str) -> Result<Vec<Token>, String> {
     // vector to store the tokens (the thing we will return at the end)
     let mut tokens = Vec::new();
 
-    // Detemines when num buffer ended
-    let mut prev_char_is_num: bool = false;
+    let mut flush = |buffer: &mut String, tokens: &mut Vec<Token>| {
+        if !buffer.is_empty() {
+            tokens.push(Token::Number(buffer.parse().unwrap()));
+            buffer.clear();
+        }
+    };
 
     // Iterating through every character and creating enums for each
     for c in input.chars() {
         match c {
             '0'..='9' | '.' => {
                 num_buffer.push(c);
-                prev_char_is_num = true;
             }
             '+' => {
-                if prev_char_is_num {
-                    tokens.push(Token::Number(num_buffer.parse().unwrap()));
-                    num_buffer.clear(); // Emptying the buffer
-                    tokens.push(Token::Plus);
-                }
+                flush(&mut num_buffer, &mut tokens);
+                tokens.push(Token::Plus);
             }
             '-' => {
-                if prev_char_is_num {
-                    tokens.push(Token::Number(num_buffer.parse().unwrap()));
-                    num_buffer.clear(); // Emptying the buffer
-                    tokens.push(Token::Minus);
-                }
+                flush(&mut num_buffer, &mut tokens);
+                tokens.push(Token::Minus);
             }
             '*' => {
-                if prev_char_is_num {
-                    tokens.push(Token::Number(num_buffer.parse().unwrap()));
-                    num_buffer.clear(); // Emptying the buffer
-                    tokens.push(Token::Multiply);
-                }
+                flush(&mut num_buffer, &mut tokens);
+                tokens.push(Token::Multiply);
             }
             '/' => {
-                if prev_char_is_num {
-                    tokens.push(Token::Number(num_buffer.parse().unwrap()));
-                    num_buffer.clear(); // Emptying the buffer
-                    tokens.push(Token::Divide);
-                }
+                flush(&mut num_buffer, &mut tokens);
+                tokens.push(Token::Divide);
             }
             '(' => tokens.push(Token::LeftParen),
-            ')' => tokens.push(Token::RightParen),
-            '^' => {
-                if prev_char_is_num {
+            ')' => {
+                if !num_buffer.is_empty() {
                     tokens.push(Token::Number(num_buffer.parse().unwrap()));
-                    num_buffer.clear(); // Emptying the buffer
-                    tokens.push(Token::Exponent);
+                    num_buffer.clear();
                 }
+                tokens.push(Token::RightParen);
+            }
+            '^' => {
+                flush(&mut num_buffer, &mut tokens);
+                tokens.push(Token::Exponent);
             }
             _ => panic!("unknown character: {}", c),
         }

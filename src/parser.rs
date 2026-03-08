@@ -50,7 +50,6 @@ fn parse_term(tokens: &[Token], current: &mut usize) -> Result<AstNode, String> 
     Ok(left)
 }
 
-
 fn parse_factor(tokens: &[Token], current: &mut usize) -> Result<AstNode, String> {
     let left = parse_primary(tokens, current)?;
 
@@ -66,7 +65,6 @@ fn parse_factor(tokens: &[Token], current: &mut usize) -> Result<AstNode, String
     Ok(left)
 }
 
-
 // Lowest level logic is here
 fn parse_primary(tokens: &[Token], current: &mut usize) -> Result<AstNode, String> {
     if *current >= tokens.len() {
@@ -80,7 +78,7 @@ fn parse_primary(tokens: &[Token], current: &mut usize) -> Result<AstNode, Strin
             Ok(AstNode::new_number(n))
         }
         Token::LeftParen => {
-            *current += 1; 
+            *current += 1;
             let node = parse_expression(tokens, current)?;
             if *current >= tokens.len() || tokens[*current] != Token::RightParen {
                 return Err(String::from("Expected closing parenthesis"));
