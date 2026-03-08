@@ -4,7 +4,12 @@ use crate::AstNode::AstNode;
 use crate::token::Token;
 
 pub fn parse(tokens: &[Token]) -> Result<AstNode, String> {
-    // Todo
+    let mut current = 0;
+    let node = parse_expression(tokens, &mut current)?;
+    if current != tokens.len() {
+        return Err(format!("Unexpected token at position {}", current));
+    }
+    Ok(node)
 }
 
 // Lowest overall precedence handling simple + and -
