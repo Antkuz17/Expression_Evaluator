@@ -7,11 +7,42 @@ pub fn parse(tokens: &[Token]) -> Result<AstNode, String> {
     // Todo
 }
 
-fn parse_expression(tokens: &[Token], current: &mut usize)
-fn parse_term(tokens: &[Token], current: &mut usize){
-    let left = parse_factor(tokens, current)?;
+// Lowest overall precedence handling simple + and -
+fn parse_expression(tokens: &[Token], current: &mut usize) -> Result<AstNode, String> {
+    let mut left = parse_term(tokens, current)?;
 
-    if 
+    while *current < tokens.len()
+        && (tokens[*current] == Token::Plus || tokens[*current] == Token::Minus)
+    {
+        let op = tokens[*current].clone();
+        *current += 1;
+        let right = parse_term(tokens, current)?;
+        let mut node = AstNode::new_operator(op);
+        node.set_left(left);
+        node.set_right(right);
+        left = node;
+    }
+
+    Ok(left)
+}
+
+// Medium precedence
+fn parse_term(tokens: &[Token], current: &mut usize) -> Result<AstNode, String> {
+    let mut left = parse_factor(tokens, current)?;
+
+    while *current < tokens.len()
+        && (tokens[*current] == Token::Multiply || tokens[*current] == Token::Divide)
+    {
+        let op = tokens[*current].clone();
+        *current += 1;
+        let right = parse_factor(tokens, current)?;
+        let mut node = AstNode::new_operator(op);
+        node.set_left(left);
+        node.set_right(right);
+        left = node;
+    }
+
+    Ok(left)
 }
 
 
