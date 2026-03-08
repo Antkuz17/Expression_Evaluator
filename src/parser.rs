@@ -8,16 +8,20 @@ pub fn parse(tokens: &[Token]) -> Result<AstNode, String> {
 }
 
 fn parse_expression(tokens: &[Token], current: &mut usize)
-fn parse_term(tokens: &[Token], current: &mut usize)
+fn parse_term(tokens: &[Token], current: &mut usize){
+    let left = parse_factor(tokens, current)?;
+
+    if 
+}
 
 
 fn parse_factor(tokens: &[Token], current: &mut usize) -> Result<AstNode, String> {
     let left = parse_primary(tokens, current)?;
 
-    if *current < tokens.len() && tokens[*current] == Token::Caret {
+    if *current < tokens.len() && tokens[*current] == Token::Exponent {
         *current += 1;
-        let right = parse_primary(tokens, current)?;
-        let mut node = AstNode::new_operator(Token::Caret);
+        let right = parse_factor(tokens, current)?;
+        let mut node = AstNode::new_operator(Token::Exponent);
         node.set_left(left);
         node.set_right(right);
         return Ok(node);
@@ -27,14 +31,27 @@ fn parse_factor(tokens: &[Token], current: &mut usize) -> Result<AstNode, String
 }
 
 
-// Used for + and -, AstNode if everything correct or error string (i think, rust lowkey hard)
+// Lowest level logic is here
 fn parse_primary(tokens: &[Token], current: &mut usize) -> Result<AstNode, String> {
-    let current_token = &tokens[*current];
-
-    if let Token::Number(n) = current_token {
-        *current += 1;
-        return Ok(AstNode::new_number(*n));
+    if *current >= tokens.len() {
+        return Err(String::from("Unexpected end of input"));
     }
 
-    Err(String::from("Expected a number"))
+    match &tokens[*current] {
+        Token::Number(n) => {
+            let n = *n;
+            *current += 1;
+            Ok(AstNode::new_number(n))
+        }
+        Token::LeftParen => {
+            *current += 1; 
+            let node = parse_expression(tokens, current)?;
+            if *current >= tokens.len() || tokens[*current] != Token::RightParen {
+                return Err(String::from("Expected closing parenthesis"));
+            }
+            *current += 1;
+            Ok(node)
+        }
+        other => Err(format!("Unexpected token: {:?}", other)),
+    }
 }
