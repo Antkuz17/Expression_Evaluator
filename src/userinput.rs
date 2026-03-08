@@ -31,11 +31,6 @@ fn validate_input(input: &str) -> bool {
     input.chars().all(|c| valid_chars.contains(&c))
 }
 
-// Allows early exit from the program if the user types "exit"
-fn is_exit_command(input: &str) -> bool {
-    input.to_lowercase() == "exit"
-}
-
 // Remove all white space since the lexer does not care about it
 fn remove_white_space(input: &str) -> String {
     input.chars().filter(|c| !c.is_whitespace()).collect()

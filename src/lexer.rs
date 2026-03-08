@@ -11,7 +11,7 @@ pub fn tokenize(input: &str) -> Result<Vec<Token>, String> {
     // vector to store the tokens (the thing we will return at the end)
     let mut tokens = Vec::new();
 
-    let mut flush = |buffer: &mut String, tokens: &mut Vec<Token>| {
+    let flush = |buffer: &mut String, tokens: &mut Vec<Token>| {
         if !buffer.is_empty() {
             tokens.push(Token::Number(buffer.parse().unwrap()));
             buffer.clear();
